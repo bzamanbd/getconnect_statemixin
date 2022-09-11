@@ -14,8 +14,16 @@ class ProductProvider extends GetConnect {
   }
 
   Future<List<dynamic>> getAllProducts() async {
-    final response = await get('https://fakestoreapi.com/products');
-    return response.body;
+    try {
+      final response = await get('https://fakestoreapi.com/products');
+      if (response.status.hasError) {
+        return Future.error(response.statusText.toString());
+      } else {
+        return response.body;
+      }
+    } catch (e) {
+      return Future.error(e.toString());
+    }
   }
 
   Future<Product?> getProduct(int id) async {
